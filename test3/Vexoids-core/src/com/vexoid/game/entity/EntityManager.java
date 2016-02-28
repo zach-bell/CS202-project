@@ -18,48 +18,66 @@ public class EntityManager {
 	public int basicEnemiesCount =3;
 	public static int enemiesKilled = 0;
 	
+	public static boolean isGameOver = false;
+	
+	int basicHealth;
+	public static int playerHealth;
+	
 	public EntityManager(int amount, OrthoCamera camera, String difficulty) {
 		player = new Player(new Vector2(470, 15), new Vector2(0, 0), this, camera);
 		
 		for (int i = 0; i <amount && i <basicEnemiesCount; i++) {
 			float x = MathUtils.random(0, MainGame.WIDTH - TextureManager.BASIC_ENEMY.getWidth());
 			float y = MathUtils.random(MainGame.HEIGHT, MainGame.HEIGHT * 2.5f);
-			float speed = MathUtils.random(0.5f, 1.5f);
+			float speed = 10;
 			addEntity(new BasicEnemy(new Vector2(x, y), new Vector2(0, - speed), this, difficulty));
 		}
 		gameDifficulty = difficulty;
 		if (difficulty == "hard"){
 			health = 4;
+			playerHealth = 5;
 		}
 		if (difficulty == "medium"){
 			health = 3;
+			playerHealth = 10;
 		}
 		if (difficulty == "easy"){
 			health = 2;
+			playerHealth = 15;
 		}
 		
 	}
 
 	int secondIncrease = 30;
 	public void update() {
+
+		if(playerHealth <= 0)
+			isGameOver = true;
+		
+		// updating the enemies in the array e
 		for (Entity e : entities)
 			e.update();
-		for (bullet2 m : getBullets())
+		
+		// bullet removing
+		for (bullet2 m : getGoodBullets())
 			if (m.checkEnd()){
-				entities.removeValue(m, false);	
+				entities.removeValue(m, false);
+			}
+		for (bullet1 n : getBadBullets())
+			if (n.checkEnd()){
+				entities.removeValue(n, false);
 			}
 		
 		if(this.noEnemies()){
 			if (MainGame.getCount() >= secondIncrease){
 				basicEnemiesCount += 3;
-				secondIncrease += 30;
+				secondIncrease += 45;
 			System.out.println("Enemies: " + basicEnemiesCount);
 			}
 			for (int i = 0; i <basicEnemiesCount; i++) {
 				float x = MathUtils.random(0, MainGame.WIDTH - TextureManager.BASIC_ENEMY.getWidth());
 				float y = MathUtils.random(MainGame.HEIGHT, MainGame.HEIGHT * 2);
-				float speed = MathUtils.random(0.3f, 1.5f);
-				addEntity(new BasicEnemy(new Vector2(x, y), new Vector2(0, - speed), this, gameDifficulty));
+				addEntity(new BasicEnemy(new Vector2(x, y), new Vector2(0, 0), this, gameDifficulty));
 			}
 		}
 		player.update();
@@ -83,11 +101,21 @@ public class EntityManager {
 				ret.add((BasicEnemy)e);
 		return ret;
 	}
-	int basicHealth;
+	
 	private void checkCollisions() {
+	
+	//player collision detection
+		for (bullet1 n : getBadBullets()) {
+			if (player.getBounds().overlaps(n.getBounds())){
+			entities.removeValue(n, false);
+			SoundManager.hit1.play(1.0f);
+			playerHealth --;
+			}
+		}
 		
+	//enemy collision detection
 		for (BasicEnemy e : getEnemies()) {
-			for (bullet2 m : getBullets()) {
+			for (bullet2 m : getGoodBullets()) {
 				if (e.getBounds().overlaps(m.getBounds())) {
 					basicHealth ++;
 					entities.removeValue(m, false);
@@ -99,16 +127,29 @@ public class EntityManager {
 					}
 				}
 			}
+			if (e.getBounds().overlaps(player.getBounds())){
+				playerHealth -= 5;
+				SoundManager.hit2.play(0.2f);
+				entities.removeValue(e, false);
+			}
 		}
 	}
 	
-	private Array<bullet2> getBullets() {
+	private Array<bullet1> getBadBullets() {
+		Array<bullet1> ret = new Array<bullet1>();
+		for (Entity n : entities)
+			if (n instanceof bullet1)
+				ret.add((bullet1)n);
+		return ret;
+	}
+	private Array<bullet2> getGoodBullets() {
 		Array<bullet2> ret = new Array<bullet2>();
 		for (Entity e : entities)
 			if (e instanceof bullet2)
 				ret.add((bullet2)e);
 		return ret;
 	}
+
 	public static int enemyKillScore(){
 		return enemiesKilled;
 	}

@@ -2,7 +2,6 @@ package com.vexoid.game.entity;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.vexoid.game.MainGame;
 import com.vexoid.game.TextureManager;
 
 public class bullet1 extends Entity {
@@ -17,6 +16,6 @@ public class bullet1 extends Entity {
 	}
 	
 	public boolean checkEnd() {
-		return pos.y >= MainGame.HEIGHT;
+		return pos.y <= 0 -this.texture.getHeight();
 	}
 }

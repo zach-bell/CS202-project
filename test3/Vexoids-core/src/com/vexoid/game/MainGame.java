@@ -21,9 +21,11 @@ public class MainGame extends ApplicationAdapter {
 	public int counterScore = 0;
 	public String displayDistance;
 	public String displayScore;
-	public static String difficulty = "easy";
+	public String displayPlayerHealth;
+	public static String difficulty = "medium";
 	BitmapFont displayDistanceFont;
 	BitmapFont displayScoreFont;
+	BitmapFont displayPlayerHealthFont;
 	
 	public static void setDifficulty(String gameDif){
 		difficulty = gameDif;
@@ -40,6 +42,9 @@ public class MainGame extends ApplicationAdapter {
 		distance = 0;
 	    displayDistanceFont = new BitmapFont();
 	    displayScoreFont = new BitmapFont();
+	    displayPlayerHealthFont = new BitmapFont();
+	    
+	    System.out.println("Difficulty = " + difficulty);
 	}
 	public void render () {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -64,6 +69,7 @@ public class MainGame extends ApplicationAdapter {
 		}
 		displayDistance = "Distance : " + distance + " kmi";
 		displayScore = "Score : " + EntityManager.enemyKillScore();
+		displayPlayerHealth = "Hearts : " + EntityManager.playerHealth;
 		
 		//System.out.println("Tick: " + CLOCK);
 		
@@ -75,10 +81,14 @@ public class MainGame extends ApplicationAdapter {
 		displayDistanceFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 		displayDistanceFont.draw(batch, displayDistance, 25, 580);
 		displayScoreFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-		displayScoreFont.draw(batch, displayScore, (MainGame.WIDTH/2)-50, 580); 
+		displayScoreFont.draw(batch, displayScore, (MainGame.WIDTH/2)-50, 580);
+		displayPlayerHealthFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+		displayPlayerHealthFont.draw(batch, displayPlayerHealth, 25, 35);
 		batch.end();
 		
-		
+		if (EntityManager.isGameOver){
+			System.out.println("YOU FUCKING DIED");
+		}
 	}
 	public static int getCount() {
 		return COUNTER;

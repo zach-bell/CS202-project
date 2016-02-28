@@ -25,7 +25,8 @@ public abstract class Entity {
 		return pos;
 	}
 	public Rectangle getBounds() {
-		return new Rectangle(pos.x, pos.y, texture.getWidth(), texture.getHeight());
+		return new Rectangle((pos.x + (texture.getWidth()/2)), (pos.y + (texture.getHeight()/2)),
+				(texture.getWidth()- (texture.getWidth()/2)), (texture.getHeight()-(texture.getHeight()/2)));
 	}
 	public void setDirection(float x, float y) {
 		direction.set(x, y);

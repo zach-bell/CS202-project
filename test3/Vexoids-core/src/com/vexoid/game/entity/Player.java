@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
 import com.vexoid.game.MainGame;
+import com.vexoid.game.SoundManager;
 import com.vexoid.game.TextureManager;
 import com.vexoid.game.camera.OrthoCamera;
 
@@ -33,16 +34,16 @@ public class Player extends Entity{
 			else
 				dir = 2;
 	}
-		if (Gdx.input.isKeyPressed(Keys.A) || dir == 1) {
+		if (Gdx.input.isKeyPressed(Keys.A) || dir == 1 || Gdx.input.isKeyPressed(Keys.LEFT)) {
 				setDirection(-300, 0);
 		} else {
-			if (Gdx.input.isKeyPressed(Keys.D) || dir ==2) {
+			if (Gdx.input.isKeyPressed(Keys.D) || dir ==2 || Gdx.input.isKeyPressed(Keys.RIGHT)) {
 			setDirection(300, 0);
 			} else {
-				if (Gdx.input.isKeyPressed(Keys.W)) {
+				if (Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.UP)) {
 					setDirection(0, 300);
 				} else {
-					if (Gdx.input.isKeyPressed(Keys.S)) {
+					if (Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.DOWN)) {
 						setDirection(0, -300);
 					} else {
 						setDirection(0,0);
@@ -56,6 +57,7 @@ public class Player extends Entity{
 		if (Gdx.input.isKeyPressed(Keys.SPACE) || dir ==1 || dir == 2){
 			if (System.currentTimeMillis() - lastFire >= shootDelay) {
 				entityManager.addEntity(new bullet2(pos.cpy().add(15, 10)));
+				SoundManager.shot2.play(0.4f);
 				lastFire = System.currentTimeMillis();
 			}
 		}
