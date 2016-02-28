@@ -8,14 +8,18 @@ public class GameScreen extends Screen{
 
 	private OrthoCamera camera;
 	private EntityManager entityManager;
+	public static int basicEnemiesCount = 4;
+	public String gameDifficulty;
 	
-	public void create() {
+	public void create(String difficulty) {
+		gameDifficulty = difficulty;
 		camera = new OrthoCamera();
-		entityManager = new EntityManager(3, camera);
+		entityManager = new EntityManager(basicEnemiesCount, camera, gameDifficulty);
 	}
 	
 	public void update() {
 		camera.update();
+		
 		entityManager.update();
 	}
 

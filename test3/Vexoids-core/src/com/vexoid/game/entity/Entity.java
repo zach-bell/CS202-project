@@ -10,6 +10,7 @@ public abstract class Entity {
 
 	protected Texture texture;
 	protected Vector2 pos, direction;
+	
 	public Entity(Texture texture, Vector2 pos, Vector2 direction) {
 		this.texture = texture;
 		this.pos = pos;

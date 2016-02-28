@@ -6,6 +6,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.vexoid.game.entity.EntityManager;
 import com.vexoid.game.screen.GameScreen;
 import com.vexoid.game.screen.ScreenManager;
 
@@ -15,20 +16,30 @@ public class MainGame extends ApplicationAdapter {
 	private SpriteBatch batch;
 	public static int CLOCK = 0;
 	public int internalCounter = 0;
-	public int COUNTER = 0;
-	public int score = 0;
+	public static int COUNTER = 0;
+	public int distance = 0;
 	public int counterScore = 0;
+	public String displayDistance;
 	public String displayScore;
-	BitmapFont yourBitmapFontName;
+	public static String difficulty = "easy";
+	BitmapFont displayDistanceFont;
+	BitmapFont displayScoreFont;
+	
+	public static void setDifficulty(String gameDif){
+		difficulty = gameDif;
+	}
 	
 	public void create () {
 		Music CurrentMusic;
 		batch = new SpriteBatch();
-		ScreenManager.setScreen(new GameScreen());
-		CurrentMusic = Gdx.audio.newMusic(Gdx.files.internal("D:/Documents/test workspace/test3/Vexoids-core/Assets/asdd - main.mp3"));
+		ScreenManager.setScreen(new GameScreen(), difficulty);
+		CurrentMusic = SoundManager.music;
 		CurrentMusic.play();
-		score = 0;
-	    yourBitmapFontName = new BitmapFont();
+		CurrentMusic.setLooping(true);
+		CurrentMusic.setVolume(0.5f);
+		distance = 0;
+	    displayDistanceFont = new BitmapFont();
+	    displayScoreFont = new BitmapFont();
 	}
 	public void render () {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -44,28 +55,32 @@ public class MainGame extends ApplicationAdapter {
 			internalCounter = 0;
 			COUNTER ++;
 			counterScore ++;
-			System.out.println("Count: " + COUNTER);
+			//System.out.println("Count: " + COUNTER);
 		}
 		if (counterScore == counterScoreLimit) {
 			counterScore = 0;
-			score ++;
+			distance ++;
 			//System.out.println("Score: " + score);
 		}
-		displayScore = "Light Years : " + score;
+		displayDistance = "Distance : " + distance + " kmi";
+		displayScore = "Score : " + EntityManager.enemyKillScore();
 		
 		//System.out.println("Tick: " + CLOCK);
 		
-		if (ScreenManager.getCurrentScreen() !=null)
+		if (ScreenManager.getCurrentScreen() !=null) {
 			ScreenManager.getCurrentScreen().update();
-		
-		if (ScreenManager.getCurrentScreen() !=null)
 			ScreenManager.getCurrentScreen().render(batch);
+		}
 		batch.begin(); 
-		yourBitmapFontName.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-		yourBitmapFontName.draw(batch, displayScore, 25, 580); 
+		displayDistanceFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+		displayDistanceFont.draw(batch, displayDistance, 25, 580);
+		displayScoreFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+		displayScoreFont.draw(batch, displayScore, (MainGame.WIDTH/2)-50, 580); 
 		batch.end();
+		
+		
 	}
-	public int getCount() {
+	public static int getCount() {
 		return COUNTER;
 	}
 	public void dispose() {

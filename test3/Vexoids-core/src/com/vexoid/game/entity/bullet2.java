@@ -18,4 +18,5 @@ public class bullet2 extends Entity {
 	public boolean checkEnd() {
 		return pos.y >= MainGame.HEIGHT;
 	}
+	
 }

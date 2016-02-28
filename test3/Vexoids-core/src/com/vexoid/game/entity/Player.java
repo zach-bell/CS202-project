@@ -12,13 +12,17 @@ public class Player extends Entity{
 	private final EntityManager entityManager;
 	private long lastFire;
 	private final OrthoCamera camera;
-	
+		
 	public Player(Vector2 pos, Vector2 direction, EntityManager entityManager, OrthoCamera camera) {
 		super(TextureManager.PLAYER, pos, direction);
 		this.entityManager = entityManager;
 		this.camera = camera;
 	}
-	@Override
+
+	
+	
+	public int shootDelay = 250;
+	
 	public void update() {
 		pos.add(direction);
 		int dir = 0;
@@ -46,8 +50,11 @@ public class Player extends Entity{
 					}
 				}
 			}
+		if (Gdx.input.isKeyPressed(Keys.K)){
+			MainGame.setDifficulty("Easy");
+		}
 		if (Gdx.input.isKeyPressed(Keys.SPACE) || dir ==1 || dir == 2){
-			if (System.currentTimeMillis() - lastFire >= 250) {
+			if (System.currentTimeMillis() - lastFire >= shootDelay) {
 				entityManager.addEntity(new bullet2(pos.cpy().add(15, 10)));
 				lastFire = System.currentTimeMillis();
 			}
