@@ -6,8 +6,8 @@ import com.vexoid.game.TextureManager;
 
 public class bullet2 extends Entity {
 
-	public bullet2(Vector2 pos) {
-		super(TextureManager.BULLET2, pos, new Vector2(0, 15));
+	public bullet2(Vector2 pos, Vector2 direction) {
+		super(TextureManager.BULLET2, pos, direction);
 	}
 
 	public void update() {

@@ -5,7 +5,6 @@ import com.vexoid.game.camera.OrthoCamera;
 import com.vexoid.game.entity.EntityManager;
 
 public class GameScreen extends Screen{
-
 	private OrthoCamera camera;
 	private EntityManager entityManager;
 	public static int basicEnemiesCount = 4;

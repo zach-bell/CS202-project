@@ -5,12 +5,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.vexoid.game.TextureManager;
 
 public class bullet1 extends Entity {
-
+	public static int spread;
+	public static int speed;
 	public bullet1(Vector2 pos) {
-		super(TextureManager.BULLET1, pos, new Vector2(MathUtils.random(-3,3), -8));
+		super(TextureManager.BULLET1, pos, new Vector2(MathUtils.random(-spread,spread), -speed));
 	}
 
 	public void update() {
+		
 		pos.add(direction);
 		
 	}

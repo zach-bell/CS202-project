@@ -14,35 +14,42 @@ public class MainGame extends ApplicationAdapter {
 	
 	public static int WIDTH = 800, HEIGHT = 600;
 	private SpriteBatch batch;
-	public static int CLOCK = 0;
 	public int internalCounter = 0;
 	public static int COUNTER = 0;
 	public int distance = 0;
 	public int counterScore = 0;
-	public String displayDistance;
-	public String displayScore;
-	public String displayPlayerHealth;
+	String displayDistance;
+	String displayScore;
+	String displayPlayerHealth;
+	String displayPlayerShootingMode;
+	String displayPlayerLives;
 	public static String difficulty = "medium";
 	BitmapFont displayDistanceFont;
 	BitmapFont displayScoreFont;
 	BitmapFont displayPlayerHealthFont;
+	BitmapFont displayPlayerLivesFont;
+	BitmapFont displayPlayerShootingModeFont;
+	Music CurrentMusic;
+	int oneTimeFire=0;
 	
 	public static void setDifficulty(String gameDif){
 		difficulty = gameDif;
 	}
 	
 	public void create () {
-		Music CurrentMusic;
 		batch = new SpriteBatch();
 		ScreenManager.setScreen(new GameScreen(), difficulty);
 		CurrentMusic = SoundManager.music;
 		CurrentMusic.play();
 		CurrentMusic.setLooping(true);
-		CurrentMusic.setVolume(0.5f);
+		CurrentMusic.setVolume(0.7f);
+		
 		distance = 0;
 	    displayDistanceFont = new BitmapFont();
 	    displayScoreFont = new BitmapFont();
 	    displayPlayerHealthFont = new BitmapFont();
+	    displayPlayerShootingModeFont = new BitmapFont();
+	    displayPlayerLivesFont = new BitmapFont();
 	    
 	    System.out.println("Difficulty = " + difficulty);
 	}
@@ -50,9 +57,8 @@ public class MainGame extends ApplicationAdapter {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-		CLOCK ++;
 		internalCounter ++;
-		
+
 		final int internalCounterLimit = 70;
 		final int counterScoreLimit = 2;
 		
@@ -67,10 +73,12 @@ public class MainGame extends ApplicationAdapter {
 			distance ++;
 			//System.out.println("Score: " + score);
 		}
-		displayDistance = "Distance : " + distance + " kmi";
-		displayScore = "Score : " + EntityManager.enemyKillScore();
-		displayPlayerHealth = "Hearts : " + EntityManager.playerHealth;
 		
+		displayDistance = "Distance : " + distance + " Km";
+		displayScore = "Score : " + EntityManager.enemyKillScore();
+		displayPlayerHealth = "Health : " + (int) EntityManager.checkPlayerHealth() + "%";
+		displayPlayerShootingMode = "Mode: " + EntityManager.getPlayerShootingMode();
+		displayPlayerLives = "Lives : " + EntityManager.getPlayerLives();
 		//System.out.println("Tick: " + CLOCK);
 		
 		if (ScreenManager.getCurrentScreen() !=null) {
@@ -84,12 +92,31 @@ public class MainGame extends ApplicationAdapter {
 		displayScoreFont.draw(batch, displayScore, (MainGame.WIDTH/2)-50, 580);
 		displayPlayerHealthFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 		displayPlayerHealthFont.draw(batch, displayPlayerHealth, 25, 35);
+		displayPlayerShootingModeFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+		displayPlayerShootingModeFont.draw(batch, displayPlayerShootingMode, 675, 35);
+		displayPlayerLivesFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+		displayPlayerLivesFont.draw(batch, displayPlayerLives, 25, 50);
 		batch.end();
 		
 		if (EntityManager.isGameOver){
-			System.out.println("YOU FUCKING DIED");
+			System.out.println("You Died");
+			if(oneTimeFire == 0){
+				stop();
+				Music newMusic;
+				newMusic = SoundManager.endMusic;
+				newMusic.play();
+				newMusic.setVolume(0.8f);
+				newMusic.setLooping(true);
+			}
 		}
 	}
+	public void play(){
+		CurrentMusic.play();
+	}
+	public void stop(){
+		CurrentMusic.stop();
+	}
+
 	public static int getCount() {
 		return COUNTER;
 	}
