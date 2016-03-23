@@ -9,7 +9,9 @@ import com.badlogic.gdx.math.Vector2;
 public abstract class Entity {
 
 	protected Texture texture;
-	protected Vector2 pos, direction;
+	protected Vector2 pos;
+	protected Vector2 direction;
+	
 	public Entity(Texture texture, Vector2 pos, Vector2 direction) {
 		this.texture = texture;
 		this.pos = pos;
@@ -24,7 +26,8 @@ public abstract class Entity {
 		return pos;
 	}
 	public Rectangle getBounds() {
-		return new Rectangle(pos.x, pos.y, texture.getWidth(), texture.getHeight());
+		return new Rectangle((pos.x + (texture.getWidth()/2)), (pos.y + (texture.getHeight()/2)),
+				(texture.getWidth()- (texture.getWidth()/2)), (texture.getHeight()-(texture.getHeight()/2)));
 	}
 	public void setDirection(float x, float y) {
 		direction.set(x, y);

@@ -3,9 +3,10 @@ package com.vexoid.game.screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public abstract class Screen {
-	public abstract void create();
 	
-	public abstract void update();
+	public abstract void create(String difficulty, int Distance);
+	
+	public abstract void update(int DIstance);
 	
 	public abstract void render(SpriteBatch sb);
 	
