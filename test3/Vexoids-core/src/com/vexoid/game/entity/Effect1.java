@@ -18,7 +18,11 @@ public class Effect1 extends Entity{
 	float xSpeed = 0.9f;
 	float ySpeed = 0.9f;
 	
+<<<<<<< HEAD
 	private int xTarget = (int) direction.x;
+=======
+	private int xTarget = (int) direction.x + (TextureManager.LASER_ENEMY.getWidth()/2)+2;
+>>>>>>> origin/master
 	private int yTarget = (int) direction.y;
 	
 	public static Texture getTexture(){
@@ -42,7 +46,12 @@ public class Effect1 extends Entity{
 	}
 	
 	public void update() {
+<<<<<<< HEAD
 		if (pos.x > xTarget-2 || pos.x < xTarget+2){
+=======
+		
+		if (pos.x > xTarget || pos.x < xTarget){
+>>>>>>> origin/master
 			if (pos.x > xTarget) {
 			xMovement = -xSpeed;
 			} else {
@@ -50,7 +59,11 @@ public class Effect1 extends Entity{
 			}
 		} 
 	// Y movement
+<<<<<<< HEAD
 		if (pos.y > yTarget-2 || pos.y < yTarget+2){
+=======
+		if (pos.y > yTarget || pos.y < yTarget){
+>>>>>>> origin/master
 			if (pos.y > yTarget) {
 			yMovement = -ySpeed;
 			} else {

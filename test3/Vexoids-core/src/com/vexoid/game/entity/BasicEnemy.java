@@ -26,19 +26,31 @@ public class BasicEnemy extends Entity {
 			firePower = MathUtils.random(4,7);
 			timeDelay = 1500;
 			shotDelay = MathUtils.random(0,20);
+<<<<<<< HEAD
 			ranLimit = 2;
+=======
+			ranLimit = 4;
+>>>>>>> origin/master
 		}
 		if (gameDifficulty == "medium") {
 			firePower = MathUtils.random(3,5);
 			timeDelay = 2000;
 			shotDelay = MathUtils.random(10,30);
+<<<<<<< HEAD
 			ranLimit = 2;
+=======
+			ranLimit = 3;
+>>>>>>> origin/master
 		}
 		if (gameDifficulty == "easy") {
 			firePower = MathUtils.random(2,4);
 			timeDelay = 3000;
 			shotDelay = MathUtils.random(20,40);
+<<<<<<< HEAD
 			ranLimit = 1;
+=======
+			ranLimit = 2;
+>>>>>>> origin/master
 		}
 	}
 
@@ -189,6 +201,35 @@ public class BasicEnemy extends Entity {
 					}
 					shooting = 0;
 				}
+<<<<<<< HEAD
+=======
+				if(ran == 3) {
+					count ++;
+					bullet1.spread = 4;
+					bullet1.speed = 4;
+					if (count >=2){
+						entityManager.addEntity(new bullet1(pos.cpy().add(15, 30)));
+						SoundManager.shot1.play(0.4f);
+					}
+					if (count >= firePower*5) {
+						count = 0;
+						lastFire = System.currentTimeMillis()+2000;
+					}
+					shooting = 0;
+				}
+				if(shooting >= shotDelay && ran ==4) {
+					count ++;
+					bullet1.spread = 1;
+					bullet1.speed = 3;
+					entityManager.addEntity(new bullet1(pos.cpy().add(15, 30)));
+					SoundManager.shot1.play(0.4f);
+					if (count >= firePower) {
+						count = 0;
+						lastFire = System.currentTimeMillis()-1000;
+					}
+					shooting = 0;
+				}
+>>>>>>> origin/master
 			}
 		}
 		

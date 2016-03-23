@@ -18,7 +18,11 @@ public class Player extends Entity{
 	public static float PositionX;
 	private int shootDelay = 20;
 	private float spread = 0.5f;
+<<<<<<< HEAD
 	static String shootingMode = "narrow", bulletMode = "light";
+=======
+	static String shootingMode = "Narrow";
+>>>>>>> origin/master
 	String difficulty;
 		
 	public Player(Vector2 pos, Vector2 direction, EntityManager entityManager, OrthoCamera camera) {
@@ -67,6 +71,7 @@ public class Player extends Entity{
 			EntityManager.lives --;
 			playerDied = false;
 		}
+<<<<<<< HEAD
 	}
 	public boolean playerOutOfLives(){
 		return playerOutOfLives;
@@ -82,6 +87,20 @@ public class Player extends Entity{
 		return bulletMode;
 	}
 	int Switch = 0, Toggle = 1, Switch2 = 0, Toggle2 = 1;
+=======
+	}
+	public boolean playerOutOfLives(){
+		return playerOutOfLives;
+	}
+	public Rectangle getBounds() {
+		return new Rectangle((pos.x + (texture.getWidth()/2)), (pos.y + (texture.getHeight()/2)),
+				(texture.getWidth()- (texture.getWidth()/1.5f)), (texture.getHeight()-(texture.getHeight()/2)));
+	}
+	public String shootingMode(){
+		return shootingMode;
+	}
+	int Switch = 0, Toggle = 1;
+>>>>>>> origin/master
 	public void update() {
 		if (canPlayerMove){
 		pos.add(direction);
@@ -96,6 +115,7 @@ public class Player extends Entity{
 			else
 				dir = 2;
 		}
+<<<<<<< HEAD
 		if ((Gdx.input.isKeyPressed(Keys.A)&&!Gdx.input.isKeyPressed(Keys.D))&&(pos.x > 0)||(dir == 1)||
 				((Gdx.input.isKeyPressed(Keys.LEFT)&&!Gdx.input.isKeyPressed(Keys.RIGHT))&&(pos.x > 0))) {
 				setDirection(-400, 0);
@@ -114,6 +134,20 @@ public class Player extends Entity{
 				} else {
 					if ((Gdx.input.isKeyPressed(Keys.S)&&!Gdx.input.isKeyPressed(Keys.W))
 							&&(pos.y > 0)|| (Gdx.input.isKeyPressed(Keys.DOWN)&&!Gdx.input.isKeyPressed(Keys.UP))&&(pos.y > 0)) {
+=======
+		if (Gdx.input.isKeyPressed(Keys.A)&&(pos.x > 0)||(dir == 1)||(Gdx.input.isKeyPressed(Keys.LEFT))) {
+				setDirection(-400, 0);
+		} else {
+			if (Gdx.input.isKeyPressed(Keys.D)&&(pos.x < MainGame.WIDTH - this.texture.getWidth())
+					||(dir ==2)||(Gdx.input.isKeyPressed(Keys.RIGHT))) {
+			setDirection(400, 0);
+			} else {
+				if (Gdx.input.isKeyPressed(Keys.W)&&(pos.y < MainGame.HEIGHT - this.texture.getHeight())
+						|| Gdx.input.isKeyPressed(Keys.UP)) {
+					setDirection(0, 400);
+				} else {
+					if (Gdx.input.isKeyPressed(Keys.S)&&(pos.y > 0)|| Gdx.input.isKeyPressed(Keys.DOWN)) {
+>>>>>>> origin/master
 						setDirection(0, -400);
 					} else {
 						setDirection(0,0);
@@ -121,8 +155,12 @@ public class Player extends Entity{
 					}
 				}
 			}
+<<<<<<< HEAD
 		
 	//	Shooting modes
+=======
+
+>>>>>>> origin/master
 		if (Gdx.input.isKeyPressed(Keys.B)&& Switch != 1 && Toggle == 1){
 			shootingMode = "Wide";
 			spread = 3.5f;
@@ -139,6 +177,7 @@ public class Player extends Entity{
 			Switch = 1;
 		else
 			Switch = 0;
+<<<<<<< HEAD
 		
 //	Switch Bullets
 		if (Gdx.input.isKeyPressed(Keys.F)&& Switch2 != 1 && Toggle2 == 1){
@@ -163,6 +202,11 @@ public class Player extends Entity{
 			if (System.currentTimeMillis() - lastFire >= shootDelay) {
 				entityManager.addEntity(new bullet2(pos.cpy().add(TextureManager.PLAYER.getWidth()/2-16,
 						TextureManager.PLAYER.getHeight()-10), new Vector2(MathUtils.random(-spread, spread), 18)));
+=======
+		if (Gdx.input.isKeyPressed(Keys.SPACE) || dir ==1 || dir == 2){
+			if (System.currentTimeMillis() - lastFire >= shootDelay) {
+				entityManager.addEntity(new bullet2(pos.cpy().add(15, 10), new Vector2(MathUtils.random(-spread, spread), 18)));
+>>>>>>> origin/master
 				SoundManager.shot2.play(0.2f);
 				lastFire = System.currentTimeMillis();
 			}
@@ -174,6 +218,11 @@ public class Player extends Entity{
 					lastFire = System.currentTimeMillis();
 			}
 		}
+		}
+	}
+	boolean canPlayerMove = true;
+	public void dontMove() {
+		canPlayerMove = false;
 	}
 }
 	boolean canPlayerMove = true;

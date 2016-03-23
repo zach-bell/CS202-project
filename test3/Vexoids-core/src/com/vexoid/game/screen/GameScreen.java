@@ -11,6 +11,7 @@ public class GameScreen extends Screen{
 	private EntityManager entityManager;
 	public static int basicEnemiesCount = 4;
 	public String gameDifficulty;
+<<<<<<< HEAD
 	int distance;
 
 	String displayDistance;
@@ -42,10 +43,19 @@ public class GameScreen extends Screen{
 	    displayPlayerLivesFont = new BitmapFont();
 	    displayPlayerBulletModeFont = new BitmapFont();
 	    displayDifficultyFont = new BitmapFont();
+=======
+
+	
+	public void create(String difficulty) {
+		gameDifficulty = difficulty;
+		camera = new OrthoCamera();
+		entityManager = new EntityManager(basicEnemiesCount, camera, gameDifficulty);
+>>>>>>> origin/master
 		}
 	
 	public void update(int Distance) {
 		camera.update();
+		
 		entityManager.update();
 		distance = Distance;
 		

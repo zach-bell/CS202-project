@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class TextureManager {
 
+<<<<<<< HEAD
 	public static Texture PLAYER = new Texture(Gdx.files.internal("assets/image/ship2.png"));
 	public static Texture BASIC_ENEMY = new Texture(Gdx.files.internal("assets/image/jellies2.png"));
 	public static Texture ADVANCED_ENEMY = new Texture(Gdx.files.internal("assets/image/jelly boss.png"));
@@ -23,6 +24,19 @@ public class TextureManager {
 	public static Texture BULLET1g = new Texture(Gdx.files.internal("assets/image/bullet1-g.png"));
 	public static Texture BULLET1b = new Texture(Gdx.files.internal("assets/image/bullet1-b.png"));
 	
+=======
+	public static Texture PLAYER = new Texture(Gdx.files.internal("assets/image/ship1.png"));
+	public static Texture BASIC_ENEMY = new Texture(Gdx.files.internal("assets/image/jellies.png"));
+	public static Texture BULLET2 = new Texture(Gdx.files.internal("assets/image/bullet2.png"));
+	public static Texture LASER_ENEMY = new Texture(Gdx.files.internal("assets/image/enemyship_1.png"));
+
+	public static Texture BULLET1 = new Texture(Gdx.files.internal("assets/image/bullet1.png"));
+	public static Texture BULLET1r = new Texture(Gdx.files.internal("assets/image/bullet1-r.png"));
+	public static Texture BULLET1y = new Texture(Gdx.files.internal("assets/image/bullet1-y.png"));
+	public static Texture BULLET1g = new Texture(Gdx.files.internal("assets/image/bullet1-g.png"));
+	public static Texture BULLET1b = new Texture(Gdx.files.internal("assets/image/bullet1-b.png"));
+	
+>>>>>>> origin/master
 	public static Texture LASER_BULLET = new Texture(Gdx.files.internal("assets/image/laser1.png"));
 	public static Texture LASER_BULLET1 = new Texture(Gdx.files.internal("assets/image/laser2.png"));
 	public static Texture LASER_BULLET2 = new Texture(Gdx.files.internal("assets/image/laser3.png"));

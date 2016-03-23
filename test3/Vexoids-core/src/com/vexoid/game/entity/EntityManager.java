@@ -17,9 +17,13 @@ public class EntityManager {
 	private final Array<Stars_Class> stars = new Array<Stars_Class>();
 	
 	private static Player player;
+<<<<<<< HEAD
 	public static int basicEnemiesCount =2;
 	public static int AdvancedEnemiesCount =-1;
 	
+=======
+	public static int basicEnemiesCount =3;
+>>>>>>> origin/master
 	String gameDifficulty;
 	public static int enemiesKilled = 0;
 	public int nullEnemiesKilled = 0;
@@ -35,12 +39,20 @@ public class EntityManager {
 		float speedy = 10;
 		addEntity(new BasicLaserEnemy(new Vector2(w, s), new Vector2(0, -speedy), this, difficulty));
 
+<<<<<<< HEAD
 		for (int i = 0; i <amount && i <basicEnemiesCount; i++) {
+=======
+/*		for (int i = 0; i <amount && i <basicEnemiesCount; i++) {
+>>>>>>> origin/master
 			float x = MathUtils.random(0, MainGame.WIDTH - TextureManager.BASIC_ENEMY.getWidth());
 			float y = MathUtils.random(MainGame.HEIGHT, MainGame.HEIGHT * 2.5f);
 			float speed = 10;
 			addEntity(new BasicEnemy(new Vector2(x, y), new Vector2(0, - speed), this, difficulty));
+<<<<<<< HEAD
 		}
+=======
+		}	*/
+>>>>>>> origin/master
 		
 		gameDifficulty = difficulty;
 		if (difficulty == "hard"){
@@ -62,8 +74,12 @@ public class EntityManager {
 			lives = 3;
 		}
 	}
+<<<<<<< HEAD
 	
 	int ran = MathUtils.random(0,1);
+=======
+
+>>>>>>> origin/master
 	int secondIncrease = 30;
 	static boolean clearedEntities = false;
 	public void update() {
@@ -106,10 +122,13 @@ public class EntityManager {
 			if (e.destroyTime()){
 				entities.removeValue(e, false);
 			}
+<<<<<<< HEAD
 		for (Effect3_LaserWarning e : getEffect3_LaserWarning())
 			if (e.destroyTime()){
 				entities.removeValue(e, false);
 			}
+=======
+>>>>>>> origin/master
 		for (Effect2 e : getEffects2())
 			if (e.destroyTime()){
 				entities.removeValue(e, false);
@@ -120,10 +139,15 @@ public class EntityManager {
 				
 		if(noEnemies()){
 			if (MainGame.getCount() >= secondIncrease){
+<<<<<<< HEAD
 				basicEnemiesCount += 1;
 				secondIncrease += 45;
 				AdvancedEnemiesCount += 1;
 				ran = MathUtils.random(0,1);
+=======
+				basicEnemiesCount += 3;
+				secondIncrease += 45;
+>>>>>>> origin/master
 			System.out.println("Enemies: " + basicEnemiesCount);
 			}
 			for (int i = 0; i <basicEnemiesCount; i++) {
@@ -131,6 +155,7 @@ public class EntityManager {
 				float y = MathUtils.random(MainGame.HEIGHT, MainGame.HEIGHT * 2);
 				addEntity(new BasicEnemy(new Vector2(x, y), new Vector2(0, 0), this, gameDifficulty));
 			}
+<<<<<<< HEAD
 			for (int i = 0; i <AdvancedEnemiesCount; i++) {
 				float x = MathUtils.random(0, MainGame.WIDTH - TextureManager.BASIC_ENEMY.getWidth());
 				float y = MathUtils.random(MainGame.HEIGHT, MainGame.HEIGHT * 2);
@@ -141,6 +166,11 @@ public class EntityManager {
 			float s = (MainGame.HEIGHT + TextureManager.LASER_ENEMY.getWidth());
 			addEntity(new BasicLaserEnemy(new Vector2(w, s), new Vector2(0, 0), this, gameDifficulty));
 			}
+=======
+			float w = MathUtils.random(0, MainGame.WIDTH - TextureManager.LASER_ENEMY.getWidth());
+			float s = (MainGame.HEIGHT + TextureManager.LASER_ENEMY.getWidth());
+			addEntity(new BasicLaserEnemy(new Vector2(w, s), new Vector2(0, 0), this, gameDifficulty));
+>>>>>>> origin/master
 		}
 		player.update();
 		checkCollisions();
@@ -174,14 +204,22 @@ public class EntityManager {
 		}
 	}
 	public void clearAllEntities(){
+<<<<<<< HEAD
 		entities.removeAll(getBasicEnemies(), false);
 		entities.removeAll(getAdvancedEnemies(), false);
+=======
+		entities.removeAll(getEnemies(), false);
+>>>>>>> origin/master
 		entities.removeAll(getLaserEnemies(), false);
 		entities.removeAll(getBadBullets(), false);
 		entities.removeAll(getLaserBullets(), false);
 		entities.removeAll(getGoodBullets(), false);
 		SoundManager.liveLost.play(0.6f);
+<<<<<<< HEAD
 		doExplosion(player.pos, 300, "red");
+=======
+		doExplosion(player.pos, 50, "red");
+>>>>>>> origin/master
 		player.pos.set(new Vector2(470, 15));
 		System.out.println("Entities Cleared");
 	}
@@ -189,9 +227,14 @@ public class EntityManager {
 		if(PlayerToo)
 			player.dontMove();
 			isGameOver = true;
+<<<<<<< HEAD
 			entities.removeAll(getBasicEnemies(), false);
 			entities.removeAll(getLaserEnemies(), false);
 			entities.removeAll(getAdvancedEnemies(), false);
+=======
+			entities.removeAll(getEnemies(), false);
+			entities.removeAll(getLaserEnemies(), false);
+>>>>>>> origin/master
 	}
 	
 	/****************************
@@ -216,10 +259,17 @@ public class EntityManager {
 		}
 
 	//enemy and bullet collision detection
+<<<<<<< HEAD
 		for (BasicEnemy e : getBasicEnemies()) {
 			for (bullet2 m : getGoodBullets()) {
 				if (e.getBounds().overlaps(m.getBounds())) {
 					e.decreaseHealth(4 * healthMultiplier);;
+=======
+		for (BasicEnemy e : getEnemies()) {
+			for (bullet2 m : getGoodBullets()) {
+				if (e.getBounds().overlaps(m.getBounds())) {
+					e.decreaseHealth(2 * healthMultiplier);;
+>>>>>>> origin/master
 					entities.removeValue(m, false);
 					doBlastEffect(m.pos.cpy(),10,m.texture, "blue");
 					SoundManager.hit1.play(0.7f);
@@ -231,6 +281,7 @@ public class EntityManager {
 					}
 				}
 			}
+<<<<<<< HEAD
 			for (Red_Bullet2 m : getPlayerRedBullets()) {
 				if (e.getBounds().overlaps(m.getBounds())) {
 					e.decreaseHealth(3.5f * healthMultiplier);;
@@ -245,6 +296,8 @@ public class EntityManager {
 					}
 				}
 			}
+=======
+>>>>>>> origin/master
 			if (e.getBounds().overlaps(player.getBounds())){
 				player.decreaseHealth(25 * damageMultiplier);
 				SoundManager.hit2.play(0.3f);
@@ -252,6 +305,7 @@ public class EntityManager {
 				doBlastEffect(e.pos.cpy(),10,e.texture, "red");
 			}
 		}
+<<<<<<< HEAD
 		
 //	Advanced Enemy
 		for (AdvancedEnemy e : getAdvancedEnemies()) {
@@ -298,6 +352,9 @@ public class EntityManager {
 // *********
 		for (BasicLaserEnemy e : getLaserEnemies()) {
 	// Blue Player bullet
+=======
+		for (BasicLaserEnemy e : getLaserEnemies()) {
+>>>>>>> origin/master
 			for (bullet2 m : getGoodBullets()) {
 				if (e.getBounds().overlaps(m.getBounds())) {
 					e.decreaseHealth(0.3f * healthMultiplier);;
@@ -312,6 +369,7 @@ public class EntityManager {
 					}
 				}
 			}
+<<<<<<< HEAD
 		// Red player bullet
 			for (Red_Bullet2 m : getPlayerRedBullets()) {
 				if (e.getBounds().overlaps(m.getBounds())) {
@@ -328,6 +386,8 @@ public class EntityManager {
 				}
 			}
 		// If player runs into him
+=======
+>>>>>>> origin/master
 			if (e.getBounds().overlaps(player.getBounds())){
 				player.decreaseHealth(25 * damageMultiplier);
 				SoundManager.hit2.play(0.2f);
@@ -339,6 +399,12 @@ public class EntityManager {
 	}
 	public static String getPlayerShootingMode(){
 		return player.shootingMode();
+<<<<<<< HEAD
+	}
+	public static int getPlayerLives(){
+		return lives;
+=======
+>>>>>>> origin/master
 	}
 	public static int getPlayerLives(){
 		return lives;
@@ -348,13 +414,22 @@ public class EntityManager {
  * 		All things relating to Arrays
  *********************************************/
 	
+<<<<<<< HEAD
+/********************************************
+ * 		All things relating to Arrays
+ *********************************************/
+	
 	private Array<BasicEnemy> getBasicEnemies() {
+=======
+	private Array<BasicEnemy> getEnemies() {
+>>>>>>> origin/master
 		Array<BasicEnemy> ret = new Array<BasicEnemy>();
 		for (Entity e : entities)
 			if (e instanceof BasicEnemy)
 				ret.add((BasicEnemy)e);
 		return ret;
 	}
+<<<<<<< HEAD
 	private Array<AdvancedEnemy> getAdvancedEnemies() {
 		Array<AdvancedEnemy> ret = new Array<AdvancedEnemy>();
 		for (Entity e : entities)
@@ -362,6 +437,8 @@ public class EntityManager {
 				ret.add((AdvancedEnemy)e);
 		return ret;
 	}
+=======
+>>>>>>> origin/master
 	private Array<BasicLaserEnemy> getLaserEnemies() {
 		Array<BasicLaserEnemy> ret = new Array<BasicLaserEnemy>();
 		for (Entity l : entities)
@@ -383,6 +460,7 @@ public class EntityManager {
 				ret.add((bullet2)e);
 		return ret;
 	}
+<<<<<<< HEAD
 	private Array<Red_Bullet2> getPlayerRedBullets() {
 		Array<Red_Bullet2> ret = new Array<Red_Bullet2>();
 		for (Entity e : entities)
@@ -390,6 +468,8 @@ public class EntityManager {
 				ret.add((Red_Bullet2)e);
 		return ret;
 	}
+=======
+>>>>>>> origin/master
 	private Array<LaserBullet1> getLaserBullets() {
 		Array<LaserBullet1> ret = new Array<LaserBullet1>();
 		for (Entity e : entities)
@@ -418,6 +498,7 @@ public class EntityManager {
 				ret.add((BlastEffect)t);
 		return ret;
 	}
+<<<<<<< HEAD
 	private Array<Effect3_LaserWarning> getEffect3_LaserWarning() {
 		Array<Effect3_LaserWarning> ret = new Array<Effect3_LaserWarning>();
 		for (Entity t : entities)
@@ -425,6 +506,8 @@ public class EntityManager {
 				ret.add((Effect3_LaserWarning)t);
 		return ret;
 	}
+=======
+>>>>>>> origin/master
 
 	public static float checkPlayerHealth(){
 		return (int) player.getHealth();
@@ -436,9 +519,13 @@ public class EntityManager {
 		return nullEnemiesKilled;
 	}
 	public boolean noEnemies() {
+<<<<<<< HEAD
 		return (getBasicEnemies().size+getLaserEnemies().size+getAdvancedEnemies().size <= 0);
 	}
 	public static String getPlayerBulletMode() {
 		return player.bulletMode();
+=======
+		return (getEnemies().size+getLaserEnemies().size <= 0);
+>>>>>>> origin/master
 	}
 }

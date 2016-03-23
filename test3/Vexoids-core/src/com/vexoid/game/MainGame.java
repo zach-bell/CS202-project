@@ -23,18 +23,24 @@ public class MainGame extends ApplicationAdapter {
 	String displayPlayerHealth;
 	String displayPlayerShootingMode;
 	String displayPlayerLives;
+<<<<<<< HEAD
 	String displayPlayerBulletMode;
 	String displayDifficulty;
 	
+=======
+>>>>>>> origin/master
 	public static String difficulty = "medium";
 	BitmapFont displayDistanceFont;
 	BitmapFont displayScoreFont;
 	BitmapFont displayPlayerHealthFont;
 	BitmapFont displayPlayerLivesFont;
 	BitmapFont displayPlayerShootingModeFont;
+<<<<<<< HEAD
 	BitmapFont displayPlayerBulletModeFont;
 	BitmapFont displayDifficultyFont;
 	
+=======
+>>>>>>> origin/master
 	Music CurrentMusic;
 	int oneTimeFire=0;
 	
@@ -44,13 +50,25 @@ public class MainGame extends ApplicationAdapter {
 	
 	public void create () {
 		batch = new SpriteBatch();
+<<<<<<< HEAD
 		ScreenManager.setScreen(new GameScreen(), difficulty, distance);
+=======
+		ScreenManager.setScreen(new GameScreen(), difficulty);
+>>>>>>> origin/master
 		CurrentMusic = SoundManager.music;
 		CurrentMusic.play();
 		CurrentMusic.setLooping(true);
 		CurrentMusic.setVolume(0.7f);
 		
 		distance = 0;
+<<<<<<< HEAD
+=======
+	    displayDistanceFont = new BitmapFont();
+	    displayScoreFont = new BitmapFont();
+	    displayPlayerHealthFont = new BitmapFont();
+	    displayPlayerShootingModeFont = new BitmapFont();
+	    displayPlayerLivesFont = new BitmapFont();
+>>>>>>> origin/master
 	    
 	    System.out.println("Difficulty = " + difficulty);
 	}
@@ -75,9 +93,15 @@ public class MainGame extends ApplicationAdapter {
 			//System.out.println("Score: " + score);
 		}
 		
+		displayDistance = "Distance : " + distance + " Km";
+		displayScore = "Score : " + EntityManager.enemyKillScore();
+		displayPlayerHealth = "Health : " + (int) EntityManager.checkPlayerHealth() + "%";
+		displayPlayerShootingMode = "Mode: " + EntityManager.getPlayerShootingMode();
+		displayPlayerLives = "Lives : " + EntityManager.getPlayerLives();
 		//System.out.println("Tick: " + CLOCK);
 		
 		if (ScreenManager.getCurrentScreen() !=null) {
+<<<<<<< HEAD
 			ScreenManager.getCurrentScreen().update(distance);
 			ScreenManager.getCurrentScreen().render(batch);
 		}
@@ -85,13 +109,37 @@ public class MainGame extends ApplicationAdapter {
 		if (EntityManager.isGameOver){
 			if(oneTimeFire == 0){
 				System.out.println("You Died");
+=======
+			ScreenManager.getCurrentScreen().update();
+			ScreenManager.getCurrentScreen().render(batch);
+		}
+		batch.begin(); 
+		displayDistanceFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+		displayDistanceFont.draw(batch, displayDistance, 25, 580);
+		displayScoreFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+		displayScoreFont.draw(batch, displayScore, (MainGame.WIDTH/2)-50, 580);
+		displayPlayerHealthFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+		displayPlayerHealthFont.draw(batch, displayPlayerHealth, 25, 35);
+		displayPlayerShootingModeFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+		displayPlayerShootingModeFont.draw(batch, displayPlayerShootingMode, 675, 35);
+		displayPlayerLivesFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+		displayPlayerLivesFont.draw(batch, displayPlayerLives, 25, 50);
+		batch.end();
+		
+		if (EntityManager.isGameOver){
+			System.out.println("You Died");
+			if(oneTimeFire == 0){
+>>>>>>> origin/master
 				stop();
 				Music newMusic;
 				newMusic = SoundManager.endMusic;
 				newMusic.play();
 				newMusic.setVolume(0.8f);
 				newMusic.setLooping(true);
+<<<<<<< HEAD
 				oneTimeFire =1;
+=======
+>>>>>>> origin/master
 			}
 		}
 	}
