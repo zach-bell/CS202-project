@@ -12,7 +12,7 @@ public class TimeManager{
 	public int level = 1;
 	int step = 1,modifier = 0,basicEnemiesCount = 3,AdvancedEnemiesCount = -2,LaserEnemiesCount=-1,
 				secondIncrease = 30,ran = MathUtils.random(0,3);
-	EntityManager entityManager;
+//	EntityManager entityManager;
 	
 	public TimeManager(String difficulty) {
 		if(difficulty=="hard"){
@@ -131,8 +131,10 @@ public class TimeManager{
 				}
 			}
 			if(step ==9){
-				level = 9;
-				step = 0;
+				if(noEnemies()){
+					level = 9;
+					step = 0;
+				}
 			}
 		}
 		if(level == 9)

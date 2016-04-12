@@ -62,7 +62,8 @@ public class BasicLaserEnemy extends Entity {
 	float ySpeed = 2;
 	private int xTarget = (int) Player.PositionX;
 	private int yTarget = MathUtils.random(MainGame.HEIGHT - 100, MainGame.HEIGHT - TextureManager.LASER_ENEMY.getHeight());
-	int firemode = 0;
+	private int adjustment = MathUtils.random(-150, 150);
+	private int firemode = 0;
 	int internalClock = 0;
 	int internalClock2 = 0;
 	boolean sound = true;
@@ -70,7 +71,15 @@ public class BasicLaserEnemy extends Entity {
 	public void update() {
 		if (firemode == 0){
 			internalClock2 = 0;
-		xTarget = (int) Player.PositionX;
+		xTarget = (int) Player.PositionX + adjustment;
+		if(xTarget <= 0){
+			adjustment = MathUtils.random(1, 150);
+			xTarget = (int) Player.PositionX + adjustment;
+		}
+		if(xTarget >= MainGame.WIDTH){
+			adjustment = MathUtils.random(-150, -1);
+			xTarget = (int) Player.PositionX + adjustment;
+		}
 		if (pos.x > xTarget+2 || pos.x < xTarget-2){
 			if (pos.x > xTarget){
 				xMovement = -xSpeed;
@@ -79,6 +88,8 @@ public class BasicLaserEnemy extends Entity {
 				}
 		} else {
 			xMovement = 0;
+			adjustment = MathUtils.random(-150, 150);
+			xSpeed = MathUtils.random(1.3f, 2);
 		}
 
 		// Y movement
