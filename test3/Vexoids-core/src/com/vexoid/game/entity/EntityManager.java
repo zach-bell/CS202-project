@@ -9,6 +9,10 @@ import com.vexoid.game.MainGame;
 import com.vexoid.game.SoundManager;
 import com.vexoid.game.TextureManager;
 import com.vexoid.game.camera.OrthoCamera;
+import com.vexoid.game.entity.bullets.LaserBullet1;
+import com.vexoid.game.entity.bullets.Red_Bullet2;
+import com.vexoid.game.entity.bullets.bullet1;
+import com.vexoid.game.entity.bullets.bullet2;
 import com.vexoid.game.entity.stars.Stars_Class;
 
 public class EntityManager {
@@ -23,7 +27,7 @@ public class EntityManager {
 	String gameDifficulty;
 	public static int enemiesKilled = 0;
 	public int nullEnemiesKilled = 0;
-	public static boolean isGameOver = false;
+	public boolean isGameOver = false;
 	private float damageMultiplier, healthMultiplier;
 	public static int lives;
 	public int modifier=0;
@@ -198,13 +202,15 @@ part of it
 		entities.removeAll(getGoodBullets(), false);
 		SoundManager.liveLost.play(0.6f);
 		doExplosion(player.pos, 300, "red");
-		player.pos.set(new Vector2(470, 15));
+		player.pos.set(new Vector2(((MainGame.WIDTH /2) - (TextureManager.PLAYER.getWidth() /2)), 15));
 		System.out.println("Entities Cleared");
 	}
 	public void clearPlayer(boolean PlayerToo){
 		if(PlayerToo)
-			player.dontMove();
+			MainGame.stopMusic();
+			player.playerCanMove(false);
 			isGameOver = true;
+			player.pos.set(-100, -100);
 			entities.removeAll(getBasicEnemies(), false);
 			entities.removeAll(getBasicLaserEnemies(), false);
 			entities.removeAll(getAdvancedEnemies(), false);
@@ -470,5 +476,10 @@ part of it
 	}
 	public static String getPlayerBulletMode() {
 		return player.bulletMode();
+	}
+
+	public static void movePlayer(int posX, int posY, boolean moveAllowed) {
+		player.playerCanMove(moveAllowed);
+		player.pos.set(posX, posY);
 	}
 }

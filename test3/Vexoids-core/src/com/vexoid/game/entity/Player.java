@@ -9,6 +9,8 @@ import com.vexoid.game.MainGame;
 import com.vexoid.game.SoundManager;
 import com.vexoid.game.TextureManager;
 import com.vexoid.game.camera.OrthoCamera;
+import com.vexoid.game.entity.bullets.Red_Bullet2;
+import com.vexoid.game.entity.bullets.bullet2;
 
 public class Player extends Entity{
 
@@ -84,7 +86,7 @@ public class Player extends Entity{
 	int Switch = 0, Toggle = 1, Switch2 = 0, Toggle2 = 1;
 	public void update() {
 
-		if (canPlayerMove){
+	if (canPlayerMove){
 		pos.add(direction);
 		PositionX = pos.x;
 		health();
@@ -98,6 +100,13 @@ public class Player extends Entity{
 				if(pos.x < (MainGame.WIDTH - TextureManager.PLAYER.getWidth()))
 				dir = 2;
 		}
+		
+/* * * * * * * *
+ * Here is the *
+ * controls of *
+ * the player  *
+ * * * * * * * */
+		
 		if ((Gdx.input.isKeyPressed(Keys.A)&&!Gdx.input.isKeyPressed(Keys.D))&&(pos.x > 0)||(dir == 1)||
 				((Gdx.input.isKeyPressed(Keys.LEFT)&&!Gdx.input.isKeyPressed(Keys.RIGHT))&&(pos.x > 0))) {
 				setDirection(-400, 0);
@@ -179,7 +188,7 @@ public class Player extends Entity{
 	}
 }
 	boolean canPlayerMove = true;
-	public void dontMove() {
-		canPlayerMove = false;
+	public void playerCanMove(boolean moving) {
+		canPlayerMove = moving;
 	}
 }

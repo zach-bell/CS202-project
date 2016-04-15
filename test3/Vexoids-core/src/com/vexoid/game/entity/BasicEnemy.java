@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.vexoid.game.MainGame;
 import com.vexoid.game.SoundManager;
 import com.vexoid.game.TextureManager;
+import com.vexoid.game.entity.bullets.bullet1;
 import com.vexoid.game.screen.GameScreen;
 
 public class BasicEnemy extends Entity {

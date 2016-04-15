@@ -1,15 +1,18 @@
 package com.vexoid.game.entity;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.vexoid.game.MainGame;
+import com.vexoid.game.SoundManager;
+import com.vexoid.game.TextureManager;
 import com.vexoid.game.screen.GameScreen;
 
 public class TimeManager{
 
 	public int internalCounter = 0;
-	public static int COUNTER = 0;
-	public static int distance = 0;
+	public int COUNTER = 0;
+	public int distance = 0;
 	public int counterScore = 0;
-	public int level = 1;
+	public int level = 0;
 	int step = 1,modifier = 0,basicEnemiesCount = 3,AdvancedEnemiesCount = -2,LaserEnemiesCount=-1,
 				secondIncrease = 30,ran = MathUtils.random(0,3);
 //	EntityManager entityManager;
@@ -25,11 +28,12 @@ public class TimeManager{
 			modifier = 0;
 		}
 	}
+	int[] oneTimeFires = {0,0,0,0,0,0,0,0,};
 	public void update(){
 		internalCounter ++;
 
-		final int internalCounterLimit = 70;
-		final int counterScoreLimit = 2;
+		final int internalCounterLimit = 70;	// This is the internal counter in seconds
+		final int counterScoreLimit = 2;		// This is the seconds to increase the distance
 		
 		if (internalCounter >= internalCounterLimit) {
 			internalCounter = 0;
@@ -37,9 +41,22 @@ public class TimeManager{
 			counterScore ++;
 		//System.out.println("Count: " + COUNTER);
 		}
-		if (counterScore >= counterScoreLimit) {
+		if (counterScore >= counterScoreLimit && level > 0) {
 			counterScore = 0;
 			distance ++;
+		}
+		if(level == 0){
+			if(oneTimeFires[0] == 0){
+				EntityManager.movePlayer(-100, -100, false);
+				SoundManager.startSound.play();
+				oneTimeFires[0] = 1;
+			}
+			if(COUNTER >= 10) {
+				EntityManager.movePlayer(((MainGame.WIDTH/2) - (TextureManager.PLAYER.getWidth()/2)), 100, true);
+				MainGame.setMusic(SoundManager.gameMusic, 0.8f, true);
+				level = 1;
+				COUNTER = 0;
+			}
 		}
 		if(level == 1){
 			if(step == 1)

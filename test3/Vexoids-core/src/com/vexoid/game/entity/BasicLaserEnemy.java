@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.vexoid.game.MainGame;
 import com.vexoid.game.SoundManager;
 import com.vexoid.game.TextureManager;
+import com.vexoid.game.entity.bullets.LaserBullet1;
 
 public class BasicLaserEnemy extends Entity {
 	String gameDifficulty;

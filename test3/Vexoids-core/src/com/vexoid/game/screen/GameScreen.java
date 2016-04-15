@@ -3,6 +3,7 @@ package com.vexoid.game.screen;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.vexoid.game.MainGame;
+import com.vexoid.game.SoundManager;
 import com.vexoid.game.camera.OrthoCamera;
 import com.vexoid.game.entity.EntityManager;
 import com.vexoid.game.entity.TimeManager;
@@ -24,6 +25,7 @@ public class GameScreen extends Screen{
 	String displayPlayerBulletMode;
 	String displayDifficulty;
 	String displayLevel;
+	String displayIntroText;
 	String infinity = "";
 
 	BitmapFont displayDistanceFont;
@@ -34,10 +36,13 @@ public class GameScreen extends Screen{
 	BitmapFont displayPlayerBulletModeFont;
 	BitmapFont displayDifficultyFont;
 	BitmapFont displayLevelFont;
+	BitmapFont displayIntroTextFont;
 	
 	public void create(String difficulty) {
 		gameDifficulty = difficulty;
 		camera = new OrthoCamera();
+		camera.resize();
+		
 		entityManager = new EntityManager(camera, gameDifficulty);
 		timeManager = new TimeManager(gameDifficulty);
 		
@@ -49,13 +54,21 @@ public class GameScreen extends Screen{
 	    displayPlayerBulletModeFont = new BitmapFont();
 	    displayDifficultyFont = new BitmapFont();
 	    displayLevelFont = new BitmapFont();
-		}
+	    displayIntroTextFont = new BitmapFont();
+	}
 	
 	public void update() {
 		camera.update();
 		entityManager.update();
 		timeManager.update();
 		count = timeManager.getCount();
+		if(timeManager.getLevel() == 0){
+			if(timeManager.getCount() <= 5)
+				displayIntroText = "In a galaxy far, far, away...";
+			if(timeManager.getCount() > 5)
+				displayIntroText = "Get ready to fight...";
+				
+		}
 		if(timeManager.getLevel() == 9)
 			infinity = "Infinity";
 		else
@@ -69,12 +82,23 @@ public class GameScreen extends Screen{
 		displayDifficulty = "Difficulty : " + gameDifficulty;
 		displayDistance = "Distance : " + timeManager.getDistance() + " Km";
 		displayLevel = "Level : " + infinity;
+		
+		if(entityManager.isGameOver){
+			System.out.println("You Died");
+			MainGame.setMusic(SoundManager.endMusic, 0.8f, true);
+		}
+		
 	}
 
 	public void render(SpriteBatch sb) {
 		sb.setProjectionMatrix(camera.combined);
 		sb.begin();
 		entityManager.render(sb);
+	if(timeManager.getLevel() == 0){
+		displayIntroTextFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+		displayIntroTextFont.draw(sb, displayIntroText, (MainGame.WIDTH/2)-100, (MainGame.HEIGHT/2));
+	}
+	if(timeManager.getLevel() > 0){
 		displayDistanceFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 		displayDistanceFont.draw(sb, displayDistance, 25, (MainGame.HEIGHT)-20);
 		
@@ -98,9 +122,8 @@ public class GameScreen extends Screen{
 		
 		displayLevelFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 		displayLevelFont.draw(sb, displayLevel, (MainGame.WIDTH)-225, (MainGame.HEIGHT)-20);
-		
+	}
 		sb.end();
-		
 	}
 	public static int getEnemies(){
 		return entityManager.getEntities();
@@ -129,5 +152,7 @@ public class GameScreen extends Screen{
 	public void resume() {
 		
 	}
-
+	public String whatScreen() {
+		return "GameScreen";
+	}
 }

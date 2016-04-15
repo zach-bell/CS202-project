@@ -5,8 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.vexoid.game.entity.EntityManager;
-import com.vexoid.game.screen.GameScreen;
+import com.vexoid.game.screen.MenuScreen;
+import com.vexoid.game.screen.Screen;
 import com.vexoid.game.screen.ScreenManager;
 
 public class MainGame extends ApplicationAdapter {
@@ -14,54 +14,47 @@ public class MainGame extends ApplicationAdapter {
 	public static int WIDTH = 800, HEIGHT = 600;
 	private SpriteBatch batch;
 	
-	public static String difficulty = "medium";
+	public String difficulty = "medium";
+
+	static Music CurrentMusic;
 	
-	Music CurrentMusic;
-	private int oneTimeFire=0;
-	
-	public static void setDifficulty(String gameDif){
-		difficulty = gameDif;
-	}
+	Screen screen;
 	
 	public void create () {
 		batch = new SpriteBatch();
-		ScreenManager.setScreen(new GameScreen(), difficulty);
-		CurrentMusic = SoundManager.music;
-		CurrentMusic.play();
-		CurrentMusic.setLooping(true);
-		CurrentMusic.setVolume(0.7f);
+		ScreenManager.setScreen(new MenuScreen(), difficulty);
 			    
 	    System.out.println("Difficulty = " + difficulty);
 	}
 	public void render () {
+		ScreenManager.screenManagement();
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		if (ScreenManager.getCurrentScreen() !=null) {
 			ScreenManager.getCurrentScreen().update();
 			ScreenManager.getCurrentScreen().render(batch);
-		}
-		
-		if (EntityManager.isGameOver){
-			if(oneTimeFire == 0){
-				System.out.println("You Died");
-				stop();
-				Music newMusic;
-				newMusic = SoundManager.endMusic;
-				newMusic.play();
-				newMusic.setVolume(0.8f);
-				newMusic.setLooping(true);
-				oneTimeFire =1;
-			}
-		}
+		} else {System.out.println("Screen not there");}
 	}
-	public void play(){
+	public static void playMusic(){
 		CurrentMusic.play();
 	}
-	public void stop(){
+	public static void stopMusic(){
 		CurrentMusic.stop();
 	}
-
+	public static void pauseMusic(){
+		CurrentMusic.pause();
+	}
+	public static void setMusic(Music music, float vol, boolean loop){
+		CurrentMusic = music;
+		CurrentMusic.play();
+		CurrentMusic.setVolume(vol);
+		CurrentMusic.setLooping(loop);
+	}
+	public void setDifficulty(String gameDif){
+		difficulty = gameDif;
+	}
+	
 	public void dispose() {
 		if (ScreenManager.getCurrentScreen() !=null)
 			ScreenManager.getCurrentScreen().dispose();
