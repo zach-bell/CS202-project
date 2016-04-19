@@ -12,6 +12,7 @@ public class BasicLaserEnemy extends Entity {
 	int timeDelay=0,textureVariation = 2,textureVariation2 = 4,stageDelay = 600;
 	public static int health;
 	public static int basicLaserEnemyHealth;
+	BlastEffect blast;
 
 	public BasicLaserEnemy(Vector2 pos, Vector2 direction, EntityManager entityManager, String difficulty) {
 		super(TextureManager.LASER_ENEMY, pos, direction);
@@ -53,6 +54,7 @@ public class BasicLaserEnemy extends Entity {
 		return healthPercent;
 	}
 	public boolean entityDied(){
+		SoundManager.laserShot1.stop();
 		return entityDied;
 	}
 	

@@ -9,8 +9,9 @@ import com.vexoid.game.MainGame;
 import com.vexoid.game.SoundManager;
 import com.vexoid.game.TextureManager;
 import com.vexoid.game.camera.OrthoCamera;
+import com.vexoid.game.entity.bullets.Blue_Bullet2;
 import com.vexoid.game.entity.bullets.Red_Bullet2;
-import com.vexoid.game.entity.bullets.bullet2;
+import com.vexoid.game.entity.bullets.Yellow_Bullet2;
 
 public class Player extends Entity{
 
@@ -106,7 +107,6 @@ public class Player extends Entity{
  * controls of *
  * the player  *
  * * * * * * * */
-		
 		if ((Gdx.input.isKeyPressed(Keys.A)&&!Gdx.input.isKeyPressed(Keys.D))&&(pos.x > 0)||(dir == 1)||
 				((Gdx.input.isKeyPressed(Keys.LEFT)&&!Gdx.input.isKeyPressed(Keys.RIGHT))&&(pos.x > 0))) {
 				setDirection(-400, 0);
@@ -153,26 +153,37 @@ public class Player extends Entity{
 		
 //	Switch Bullets
 		if (Gdx.input.isKeyPressed(Keys.F)&& Switch2 != 1 && Toggle2 == 1){
-			bulletMode = "heavy";
-			shootDelay = 100;
+			bulletMode = "energy";
+			shootDelay = 10;
 			SoundManager.sound1.play(1);
 			Toggle2 = 2;
 		} else
 		if (Gdx.input.isKeyPressed(Keys.F)&& Switch2 != 1 && Toggle2 == 2){
+			bulletMode = "heavy";
+			shootDelay = 100;
+			SoundManager.sound1.play(1);
+			Toggle2 = 3;
+		} else
+		if (Gdx.input.isKeyPressed(Keys.F)&& Switch2 != 1 && Toggle2 == 3){
 			bulletMode = "light";
 			shootDelay = 20;
 			SoundManager.sound1.play(1);
 			Toggle2 = 1;
-		}
+		}			
 		if (Gdx.input.isKeyPressed(Keys.F))
 			Switch2 = 1;
 		else
 			Switch2 = 0;
 		
+		Vector2 point1 = new Vector2(pos.cpy().add(-14, TextureManager.PLAYER.getHeight()/2));
+		Vector2 point2 = new Vector2(pos.cpy().add(TextureManager.PLAYER.getWidth()-17,TextureManager.PLAYER.getHeight()/2));
+		int var = MathUtils.random(2,5);
+		
+		
 		if (Gdx.input.isKeyPressed(Keys.SPACE) || dir ==1 || dir == 2){
 			if(bulletMode == "light")
 			if (System.currentTimeMillis() - lastFire >= shootDelay) {
-				entityManager.addEntity(new bullet2(pos.cpy().add(TextureManager.PLAYER.getWidth()/2-16,
+				entityManager.addEntity(new Blue_Bullet2(pos.cpy().add(TextureManager.PLAYER.getWidth()/2-16,
 						TextureManager.PLAYER.getHeight()-10), new Vector2(MathUtils.random(-spread, spread), 18)));
 				SoundManager.shot2.play(0.2f);
 				lastFire = System.currentTimeMillis();
@@ -182,6 +193,16 @@ public class Player extends Entity{
 					entityManager.addEntity(new Red_Bullet2(pos.cpy().add(TextureManager.PLAYER.getWidth()/2-16,
 							TextureManager.PLAYER.getHeight()-10), new Vector2(MathUtils.random(-spread, spread), 18)));
 					SoundManager.shot2.play(0.2f);
+					lastFire = System.currentTimeMillis();
+			}
+			if(bulletMode == "energy")
+				if (System.currentTimeMillis() - lastFire >= shootDelay) {
+					int r = MathUtils.random(0,1);
+					if(r==0)
+						entityManager.addEntity(new Yellow_Bullet2(point1, new Vector2(MathUtils.random(-spread-var, spread), 10)));
+					if(r==1)
+						entityManager.addEntity(new Yellow_Bullet2(point2, new Vector2(MathUtils.random(-spread, spread+var), 10)));
+					SoundManager.shot3.play(0.1f);
 					lastFire = System.currentTimeMillis();
 			}
 		}

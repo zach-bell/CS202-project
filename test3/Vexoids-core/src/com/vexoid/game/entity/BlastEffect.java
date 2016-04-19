@@ -56,6 +56,24 @@ public class BlastEffect extends Entity{
 			else
 				return TextureManager.BLUE_EFFECT1;
 		} else
+			if(Color == "yellow"){
+				if(text==1)
+					return TextureManager.YELLOW_EFFECT1;
+				else
+				if(text==2)
+					return TextureManager.YELLOW_EFFECT2;
+				else
+				if(text==3)
+					return TextureManager.YELLOW_EFFECT3;
+				else
+				if(text==4)
+					return TextureManager.YELLOW_EFFECT4;
+				else
+				if(text==5)
+					return TextureManager.YELLOW_EFFECT5;
+				else
+					return TextureManager.YELLOW_EFFECT1;
+			} else
 			return TextureManager.RED_EFFECT1;
 	}
 	private float xMovement = MathUtils.random(-speed, speed), yMovement = MathUtils.random(-speed, speed);

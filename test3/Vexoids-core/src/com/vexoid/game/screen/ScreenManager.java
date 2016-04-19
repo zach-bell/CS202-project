@@ -2,7 +2,7 @@ package com.vexoid.game.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.vexoid.game.MainGame;
+import com.vexoid.game.SoundManager;
 
 public class ScreenManager {
 	
@@ -20,15 +20,16 @@ public class ScreenManager {
 		return currentScreen;
 	}
 	public static void screenManagement(){
-		if (Gdx.input.isKeyPressed(Keys.ESCAPE)&& (ScreenManager.getCurrentScreen().whatScreen() == "GameScreen")){
-			ScreenManager.getCurrentScreen().dispose();
-			MainGame.stopMusic();
-			ScreenManager.setScreen(new MenuScreen(), Difficulty);
-		}
 		if (Gdx.input.isKeyPressed(Keys.ENTER)&& (ScreenManager.getCurrentScreen().whatScreen() == "MenuScreen")){
 			ScreenManager.getCurrentScreen().dispose();
-			MainGame.stopMusic();
+			SoundManager.stopMusic();
 			ScreenManager.setScreen(new GameScreen(), Difficulty);
 		}
+		if (Gdx.input.isKeyPressed(Keys.ENTER)&& (ScreenManager.getCurrentScreen().whatScreen() == "GameOverScreen")){
+			ScreenManager.getCurrentScreen().dispose();
+			SoundManager.stopMusic();
+			ScreenManager.setScreen(new MenuScreen(), Difficulty);
+		}
+		
 	}
 }

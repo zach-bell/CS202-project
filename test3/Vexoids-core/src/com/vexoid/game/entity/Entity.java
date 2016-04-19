@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 public abstract class Entity {
 
 	protected Texture texture;
-	protected Vector2 pos, direction, rotation;
+	protected Vector2 pos, direction;
 	
 	public Entity(Texture texture, Vector2 pos, Vector2 direction) {
 		this.texture = texture;
@@ -31,9 +31,5 @@ public abstract class Entity {
 	public void setDirection(float x, float y) {
 		direction.set(x, y);
 		direction.scl(Gdx.graphics.getDeltaTime());
-	}
-	public void setRotation(float d){
-		rotation.rotate(d);
-		rotation.scl(Gdx.graphics.getDeltaTime());
 	}
 }

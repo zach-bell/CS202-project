@@ -4,20 +4,24 @@ import com.badlogic.gdx.math.MathUtils;
 import com.vexoid.game.MainGame;
 import com.vexoid.game.SoundManager;
 import com.vexoid.game.TextureManager;
+import com.vexoid.game.screen.GameOverScreen;
 import com.vexoid.game.screen.GameScreen;
+import com.vexoid.game.screen.ScreenManager;
 
 public class TimeManager{
 
-	public int internalCounter = 0;
-	public int COUNTER = 0;
-	public int distance = 0;
-	public int counterScore = 0;
-	public int level = 0;
+	private int internalCounter = 0;
+	private int COUNTER = 0;
+	private int distance = 0;
+	private int counterScore = 0;
+	private int level = 0;
+	private String difficulty;
 	int step = 1,modifier = 0,basicEnemiesCount = 3,AdvancedEnemiesCount = -2,LaserEnemiesCount=-1,
 				secondIncrease = 30,ran = MathUtils.random(0,3);
 //	EntityManager entityManager;
 	
 	public TimeManager(String difficulty) {
+		this.difficulty = difficulty;
 		if(difficulty=="hard"){
 			modifier = 1;
 		}
@@ -28,7 +32,8 @@ public class TimeManager{
 			modifier = 0;
 		}
 	}
-	int[] oneTimeFires = {0,0,0,0,0,0,0,0,};
+	int[] oneTimeFires = {0,0,0};	//	Have 2
+	int [] bossOneTimeFires = {0,0};	// Have 0
 	public void update(){
 		internalCounter ++;
 
@@ -45,6 +50,21 @@ public class TimeManager{
 			counterScore = 0;
 			distance ++;
 		}
+		if(GameScreen.isGameOver()){
+			if(oneTimeFires[1] == 0){
+				COUNTER = 0;
+				SoundManager.stopMusic();
+				oneTimeFires[1] = 1;
+			}
+			level=-1;
+		}
+		// conditions for certain levels
+		if(level == -1){
+			if(COUNTER >= 5){
+				ScreenManager.setScreen(new GameOverScreen(), difficulty);
+			}
+		}
+		// Start levels
 		if(level == 0){
 			if(oneTimeFires[0] == 0){
 				EntityManager.movePlayer(-100, -100, false);
@@ -53,7 +73,7 @@ public class TimeManager{
 			}
 			if(COUNTER >= 10) {
 				EntityManager.movePlayer(((MainGame.WIDTH/2) - (TextureManager.PLAYER.getWidth()/2)), 100, true);
-				MainGame.setMusic(SoundManager.gameMusic, 0.8f, true);
+				SoundManager.setMusic(SoundManager.gameMusic, 0.8f, true);
 				level = 1;
 				COUNTER = 0;
 			}
@@ -84,6 +104,7 @@ public class TimeManager{
 			if(step ==3){
 				if(noEnemies()){
 					addBasicLaserEnemy();
+					addBasicEnemy();
 					System.out.println("Is on step 3");
 				}
 				if(COUNTER >= 15){
@@ -104,6 +125,7 @@ public class TimeManager{
 					for (int i = 0; i <3 + modifier; i++) {
 						addBasicEnemy();
 					}
+					addAdvancedEnemy();
 					if(COUNTER >= 70){
 						step = 6;
 						COUNTER = 0;

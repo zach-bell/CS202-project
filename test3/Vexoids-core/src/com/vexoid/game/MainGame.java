@@ -36,21 +36,7 @@ public class MainGame extends ApplicationAdapter {
 			ScreenManager.getCurrentScreen().render(batch);
 		} else {System.out.println("Screen not there");}
 	}
-	public static void playMusic(){
-		CurrentMusic.play();
-	}
-	public static void stopMusic(){
-		CurrentMusic.stop();
-	}
-	public static void pauseMusic(){
-		CurrentMusic.pause();
-	}
-	public static void setMusic(Music music, float vol, boolean loop){
-		CurrentMusic = music;
-		CurrentMusic.play();
-		CurrentMusic.setVolume(vol);
-		CurrentMusic.setLooping(loop);
-	}
+
 	public void setDifficulty(String gameDif){
 		difficulty = gameDif;
 	}

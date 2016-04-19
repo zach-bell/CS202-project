@@ -1,5 +1,7 @@
 package com.vexoid.game.entity;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -9,11 +11,13 @@ import com.vexoid.game.MainGame;
 import com.vexoid.game.SoundManager;
 import com.vexoid.game.TextureManager;
 import com.vexoid.game.camera.OrthoCamera;
+import com.vexoid.game.entity.bullets.Blue_Bullet2;
 import com.vexoid.game.entity.bullets.LaserBullet1;
 import com.vexoid.game.entity.bullets.Red_Bullet2;
+import com.vexoid.game.entity.bullets.Yellow_Bullet2;
 import com.vexoid.game.entity.bullets.bullet1;
-import com.vexoid.game.entity.bullets.bullet2;
 import com.vexoid.game.entity.stars.Stars_Class;
+import com.vexoid.game.screen.ScreenManager;
 
 public class EntityManager {
 	
@@ -110,11 +114,19 @@ part of it
 			s.update();
 
 	// bullet removing
-		for (bullet2 m : getGoodBullets())
+		for (Blue_Bullet2 m : getPlayerBlueBullets())
 			if (m.checkEnd()){
 				entities.removeValue(m, false);
 			}
-		for (bullet1 n : getBadBullets())
+		for (Red_Bullet2 m : getPlayerRedBullets())
+			if (m.checkEnd()){
+				entities.removeValue(m, false);
+			}
+		for (Yellow_Bullet2 m : getPlayerYellowBullets())
+			if (m.checkEnd()){
+				entities.removeValue(m, false);
+			}
+		for (bullet1 n : getEnemyPurpleBullets())
 			if (n.checkEnd()){
 				entities.removeValue(n, false);
 			}
@@ -144,7 +156,10 @@ part of it
 		
 		player.update();
 		checkCollisions();
-		if (lives < 0) clearPlayer(true);
+		if(isGameOver){
+			endGame(true);
+		}
+		if (lives < 0) isGameOver = true;
 	}
 	
 // ***********************
@@ -184,36 +199,28 @@ part of it
 	private void doBlastEffect(Vector2 pos, int ammount, Texture texture, String color){
 		Vector2 Position = pos;
 		for(int i=1; i <=ammount; i++){
-		addEntity(new BlastEffect(new Vector2(Position.x+(texture.getWidth()/2)+MathUtils.random(-5,5),Position.y+(texture.getWidth()/2)+MathUtils.random(-5,5)),new Vector2(0, 0), 1.5f, color));
+		addEntity(new BlastEffect(new Vector2(Position.x+(texture.getWidth()/2)+MathUtils.random(-5,5),
+				Position.y+(texture.getWidth()/2)+MathUtils.random(-5,5)),new Vector2(0, 0), 1.5f, color));
 		}
 	}
-	private void doExplosion(Vector2 pos, int ammount, String color){
+	private void doExplosion(Vector2 pos, int ammount,Texture texture, int size, String color){
 		Vector2 Position = pos;
 		for(int i=1; i <=ammount; i++){
-		addEntity(new BlastEffect(new Vector2(Position.x, Position.y), new Vector2(0, 0), 50, color));
+		addEntity(new BlastEffect(new Vector2(Position.x+(texture.getWidth()/2)+MathUtils.random(-5,5),
+				Position.y+(texture.getWidth()/2)+MathUtils.random(-5,5)), new Vector2(0, 0), size, color));
 		}
 	}
 	public void clearAllEntities(){
 		entities.removeAll(getBasicEnemies(), false);
 		entities.removeAll(getAdvancedEnemies(), false);
 		entities.removeAll(getBasicLaserEnemies(), false);
-		entities.removeAll(getBadBullets(), false);
+		entities.removeAll(getEnemyPurpleBullets(), false);
 		entities.removeAll(getLaserBullets(), false);
-		entities.removeAll(getGoodBullets(), false);
+		entities.removeAll(getPlayerBlueBullets(), false);
 		SoundManager.liveLost.play(0.6f);
-		doExplosion(player.pos, 300, "red");
+		doExplosion(player.pos, 300, TextureManager.PLAYER, 50, "red");
 		player.pos.set(new Vector2(((MainGame.WIDTH /2) - (TextureManager.PLAYER.getWidth() /2)), 15));
 		System.out.println("Entities Cleared");
-	}
-	public void clearPlayer(boolean PlayerToo){
-		if(PlayerToo)
-			MainGame.stopMusic();
-			player.playerCanMove(false);
-			isGameOver = true;
-			player.pos.set(-100, -100);
-			entities.removeAll(getBasicEnemies(), false);
-			entities.removeAll(getBasicLaserEnemies(), false);
-			entities.removeAll(getAdvancedEnemies(), false);
 	}
 	
 	/****************************
@@ -222,7 +229,7 @@ part of it
 	private void checkCollisions() {
 		
 // 
-		for (bullet1 n : getBadBullets()) {
+		for (bullet1 n : getEnemyPurpleBullets()) {
 			if (player.getBounds().overlaps(n.getBounds())){
 			entities.removeValue(n, false);
 			doBlastEffect(n.pos.cpy(),10,n.texture, "red");
@@ -245,16 +252,17 @@ part of it
 	***********
 */
 		for (BasicEnemy e : getBasicEnemies()) {
-			for (bullet2 m : getGoodBullets()) {
+			for (Blue_Bullet2 m : getPlayerBlueBullets()) {
 				if (e.getBounds().overlaps(m.getBounds())) {
 					e.decreaseHealth(4 * healthMultiplier);;
 					entities.removeValue(m, false);
 					doBlastEffect(m.pos.cpy(),10,m.texture, "blue");
 					SoundManager.hit1.play(0.7f);
 					if (e.entityDied){
+						SoundManager.hit4.play(0.8f);
 						enemiesKilled += 100;
 						nullEnemiesKilled += 100;
-						doBlastEffect(e.pos.cpy(),10,e.texture, "blue");
+						doExplosion(e.pos.cpy(), 25, e.texture, 5, "red");
 						entities.removeValue(e, false);
 					}
 				}
@@ -268,7 +276,22 @@ part of it
 					if (e.entityDied){
 						enemiesKilled += 500;
 						nullEnemiesKilled += 500;
-						doBlastEffect(e.pos.cpy(),15,e.texture, "red");
+						doExplosion(e.pos.cpy(), 25, e.texture, 5, "red");
+						entities.removeValue(e, false);
+					}
+				}
+			}
+		//	Yellow Player Bullet
+			for (Yellow_Bullet2 m : getPlayerYellowBullets()) {
+				if (e.getBounds().overlaps(m.getBounds())) {
+					e.decreaseHealth(2 * healthMultiplier);;
+					entities.removeValue(m, false);
+					doBlastEffect(m.pos.cpy(),10,m.texture, "yellow");
+					SoundManager.hit1.play(0.6f);
+					if (e.entityDied){
+						enemiesKilled += 500;
+						nullEnemiesKilled += 500;
+						doExplosion(e.pos.cpy(), 25, e.texture, 5, "yellow");
 						entities.removeValue(e, false);
 					}
 				}
@@ -286,16 +309,17 @@ part of it
 //	**************
 		for (AdvancedEnemy e : getAdvancedEnemies()) {
 		// Blue Player bullet
-			for (bullet2 m : getGoodBullets()) {
+			for (Blue_Bullet2 m : getPlayerBlueBullets()) {
 				if (e.getBounds().overlaps(m.getBounds())) {
 					e.decreaseHealth(1 * healthMultiplier);;
 					entities.removeValue(m, false);
 					doBlastEffect(m.pos.cpy(),10,m.texture, "blue");
 					SoundManager.hit1.play(0.7f);
 					if (e.entityDied){
+						SoundManager.hit4.play(0.8f);
 						enemiesKilled += 100;
 						nullEnemiesKilled += 100;
-						doBlastEffect(e.pos.cpy(),10,e.texture, "blue");
+						doExplosion(e.pos.cpy(), 25, e.texture, 5, "red");
 						entities.removeValue(e, false);
 					}
 				}
@@ -308,9 +332,25 @@ part of it
 					doBlastEffect(m.pos.cpy(),10,m.texture, "red");
 					SoundManager.hit1.play(0.6f);
 					if (e.entityDied){
+						SoundManager.hit4.play(0.8f);
 						enemiesKilled += 500;
 						nullEnemiesKilled += 500;
-						doBlastEffect(e.pos.cpy(),15,e.texture, "red");
+						doExplosion(e.pos.cpy(), 25, e.texture, 5, "red");
+						entities.removeValue(e, false);
+					}
+				}
+			}
+		//	Yellow Player Bullet
+			for (Yellow_Bullet2 m : getPlayerYellowBullets()) {
+				if (e.getBounds().overlaps(m.getBounds())) {
+					e.decreaseHealth(2 * healthMultiplier);;
+					entities.removeValue(m, false);
+					doBlastEffect(m.pos.cpy(),10,m.texture, "yellow");
+					SoundManager.hit1.play(0.6f);
+					if (e.entityDied){
+						enemiesKilled += 500;
+						nullEnemiesKilled += 500;
+						doExplosion(e.pos.cpy(), 25, e.texture, 5, "yellow");
 						entities.removeValue(e, false);
 					}
 				}
@@ -328,16 +368,17 @@ part of it
 // *********
 		for (BasicLaserEnemy e : getBasicLaserEnemies()) {
 	// Blue Player bullet
-			for (bullet2 m : getGoodBullets()) {
+			for (Blue_Bullet2 m : getPlayerBlueBullets()) {
 				if (e.getBounds().overlaps(m.getBounds())) {
 					e.decreaseHealth(0.3f * healthMultiplier);;
 					entities.removeValue(m, false);
 					doBlastEffect(m.pos.cpy(),10,m.texture, "blue");
 					SoundManager.hit1.play(0.6f);
 					if (e.entityDied){
+						SoundManager.hit4.play(0.8f);
 						enemiesKilled += 500;
 						nullEnemiesKilled += 500;
-						doBlastEffect(e.pos.cpy(),15,e.texture, "blue");
+						doExplosion(e.pos.cpy(), 25, e.texture, 5, "red");
 						entities.removeValue(e, false);
 					}
 				}
@@ -350,9 +391,25 @@ part of it
 					doBlastEffect(m.pos.cpy(),10,m.texture, "red");
 					SoundManager.hit1.play(0.6f);
 					if (e.entityDied){
+						SoundManager.hit4.play(0.8f);
 						enemiesKilled += 500;
 						nullEnemiesKilled += 500;
-						doBlastEffect(e.pos.cpy(),15,e.texture, "red");
+						doExplosion(e.pos.cpy(), 25, e.texture, 5, "red");
+						entities.removeValue(e, false);
+					}
+				}
+			}
+		//	Yellow Player Bullet
+			for (Yellow_Bullet2 m : getPlayerYellowBullets()) {
+				if (e.getBounds().overlaps(m.getBounds())) {
+					e.decreaseHealth(1 * healthMultiplier);;
+					entities.removeValue(m, false);
+					doBlastEffect(m.pos.cpy(),10,m.texture, "yellow");
+					SoundManager.hit1.play(0.6f);
+					if (e.entityDied){
+						enemiesKilled += 500;
+						nullEnemiesKilled += 500;
+						doExplosion(e.pos.cpy(), 25, e.texture, 5, "yellow");
 						entities.removeValue(e, false);
 					}
 				}
@@ -399,18 +456,18 @@ part of it
 				ret.add((BasicLaserEnemy)l);
 		return ret;
 	}
-	private Array<bullet1> getBadBullets() {
+	private Array<bullet1> getEnemyPurpleBullets() {
 		Array<bullet1> ret = new Array<bullet1>();
 		for (Entity n : entities)
 			if (n instanceof bullet1)
 				ret.add((bullet1)n);
 		return ret;
 	}
-	private Array<bullet2> getGoodBullets() {
-		Array<bullet2> ret = new Array<bullet2>();
+	private Array<Blue_Bullet2> getPlayerBlueBullets() {
+		Array<Blue_Bullet2> ret = new Array<Blue_Bullet2>();
 		for (Entity e : entities)
-			if (e instanceof bullet2)
-				ret.add((bullet2)e);
+			if (e instanceof Blue_Bullet2)
+				ret.add((Blue_Bullet2)e);
 		return ret;
 	}
 	private Array<Red_Bullet2> getPlayerRedBullets() {
@@ -420,6 +477,14 @@ part of it
 				ret.add((Red_Bullet2)e);
 		return ret;
 	}
+	private Array<Yellow_Bullet2> getPlayerYellowBullets() {
+		Array<Yellow_Bullet2> ret = new Array<Yellow_Bullet2>();
+		for (Entity e : entities)
+			if (e instanceof Yellow_Bullet2)
+				ret.add((Yellow_Bullet2)e);
+		return ret;
+	}
+	
 	private Array<LaserBullet1> getLaserBullets() {
 		Array<LaserBullet1> ret = new Array<LaserBullet1>();
 		for (Entity e : entities)
@@ -477,9 +542,35 @@ part of it
 	public static String getPlayerBulletMode() {
 		return player.bulletMode();
 	}
-
+	public void listenForKeys(){
+		if (Gdx.input.isKeyPressed(Keys.ESCAPE)&& (ScreenManager.getCurrentScreen().whatScreen() == "GameScreen")){
+			endGame(true);
+		}
+	}
+	public boolean isGameOver(){
+		return isGameOver;
+	}
+	private int onetime = 0;
+	public void endGame(boolean condition){
+		SoundManager.stopMusic();
+		if(onetime==0){
+			SoundManager.liveLost.play();
+			onetime=1;
+			SoundManager.stopMusic();
+		}
+		player.playerCanMove(false);
+		player.pos.set(-100, -100);
+		entities.removeAll(getBasicEnemies(), false);
+		entities.removeAll(getBasicLaserEnemies(), false);
+		entities.removeAll(getAdvancedEnemies(), false);
+		isGameOver = condition;
+	}
 	public static void movePlayer(int posX, int posY, boolean moveAllowed) {
 		player.playerCanMove(moveAllowed);
 		player.pos.set(posX, posY);
+	}
+
+	public int getScore() {
+		return enemiesKilled;
 	}
 }

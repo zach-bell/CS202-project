@@ -31,7 +31,7 @@ public class MenuScreen extends Screen{
 		camera = new OrthoCamera();
 		camera.resize();
 		
-		MainGame.setMusic(SoundManager.menuMusic, 0.8f, true);
+		SoundManager.setMusic(SoundManager.menuMusic, 0.8f, true);
 		
 		displayTitleFont = new BitmapFont();
 		displayGameDifficultyFont = new BitmapFont();
@@ -83,9 +83,9 @@ public class MenuScreen extends Screen{
 	}
 
 	public void handleMusic(Music music, float vol, boolean loop) {
-		MainGame.stopMusic();
-		MainGame.setMusic(music, vol, loop);
-		MainGame.playMusic();
+		SoundManager.stopMusic();
+		SoundManager.setMusic(music, vol, loop);
+		SoundManager.playMusic();
 	}
 
 	public String whatScreen() {

@@ -11,7 +11,7 @@ import com.vexoid.game.entity.TimeManager;
 public class GameScreen extends Screen{
 	private OrthoCamera camera;
 	private static EntityManager entityManager;
-	private TimeManager timeManager;
+	private static TimeManager timeManager;
 	public static int basicEnemiesCount = 4;
 	public String gameDifficulty;
 	int distance;
@@ -64,10 +64,12 @@ public class GameScreen extends Screen{
 		count = timeManager.getCount();
 		if(timeManager.getLevel() == 0){
 			if(timeManager.getCount() <= 5)
-				displayIntroText = "In a galaxy far, far, away...";
+				displayIntroText = "Light Years from home, you fly your ship...";
 			if(timeManager.getCount() > 5)
 				displayIntroText = "Get ready to fight...";
-				
+		}
+		if(timeManager.getLevel() > 0){
+			entityManager.listenForKeys();
 		}
 		if(timeManager.getLevel() == 9)
 			infinity = "Infinity";
@@ -83,11 +85,9 @@ public class GameScreen extends Screen{
 		displayDistance = "Distance : " + timeManager.getDistance() + " Km";
 		displayLevel = "Level : " + infinity;
 		
-		if(entityManager.isGameOver){
-			System.out.println("You Died");
-			MainGame.setMusic(SoundManager.endMusic, 0.8f, true);
+		if(entityManager.isGameOver()){
+			SoundManager.setMusic(SoundManager.endMusic, 0.8f, true);
 		}
-		
 	}
 
 	public void render(SpriteBatch sb) {
@@ -125,6 +125,9 @@ public class GameScreen extends Screen{
 	}
 		sb.end();
 	}
+	public static boolean isGameOver(){
+		return entityManager.isGameOver();
+	}
 	public static int getEnemies(){
 		return entityManager.getEntities();
 	}
@@ -134,9 +137,15 @@ public class GameScreen extends Screen{
 		if(i == 2)
 		entityManager.addAdvancedEnemy();
 		if(i == 3)
-		entityManager.addBasicLaserEnemy();
-		
+		entityManager.addBasicLaserEnemy();	
 	}
+	public static int getDistance(){
+		return timeManager.getDistance();
+	}
+	public static int getScore(){
+		return entityManager.getScore();
+	}
+	
 	public void resize(int width, int height) {
 		camera.resize();
 	}
